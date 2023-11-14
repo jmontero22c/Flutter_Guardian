@@ -1,15 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
+import 'package:my_app/Routes/routes.dart';
 
 class MainPage extends StatelessWidget {
-  final List<String>? routes;
-  const MainPage({super.key, required this.routes});
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print(routes);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: secondColor,
@@ -58,7 +55,7 @@ class Options extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.pushNamed(context, '/WifiSetting');   
+            Navigator.pushNamed(context, RouteManager.wifiSetting);   
           },  
         );
       }),
