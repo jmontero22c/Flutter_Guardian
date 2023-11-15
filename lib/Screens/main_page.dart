@@ -1,24 +1,21 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
+import 'package:my_app/Routes/routes.dart';
 
 class MainPage extends StatelessWidget {
-  final List<String>? routes;
-  const MainPage({super.key, required this.routes});
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print(routes);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: secondColor,
+        backgroundColor: AppColors.secondColor,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: const Text("Menu"),
-        iconTheme: const IconThemeData(color: mainColor),
+        iconTheme: const IconThemeData(color: AppColors.mainColor),
       ),
-      backgroundColor: mainColor,
+      backgroundColor: AppColors.mainColor,
 
       body: const Options(),
     );
@@ -41,7 +38,7 @@ class Options extends StatelessWidget {
             margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: secondColor, 
+              color: AppColors.secondColor, 
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +55,7 @@ class Options extends StatelessWidget {
             ),
           ),
           onTap: () {
-            Navigator.pushNamed(context, '/WifiSetting');   
+            Navigator.pushNamed(context, RouteManager.wifiSetting);   
           },  
         );
       }),
