@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:http/http.dart' as http;
 
 class WifiSettings extends StatefulWidget {
   const WifiSettings({super.key});
@@ -13,34 +12,41 @@ class WifiSettings extends StatefulWidget {
 
 class _WifiSettings extends State<WifiSettings> {
   final info = NetworkInfo();
-  String nameWifi = '';
-  String? wifiIP = 'IP PRUEBA';
+  var locationStatus = Permission.location.status;
+  List wifiObject = [];
 
-  Future<void> connectWifi() async {
+  @override
+  void initState(){
+    super.initState();
+    getPermission();
+  }
+
+  Future<void> getPermission() async{
     var locationStatus = await Permission.location.status;
-
-    print(locationStatus);
     if (locationStatus.isDenied){
       await Permission.locationWhenInUse.request();
     }
     if (await Permission.location.isRestricted) {
       openAppSettings();
     }
-    if (await Permission.location.isGranted) 
-    {
-      var wifiName = await info.getWifiName();
-      var _wifiIP = await info.getWifiIP();
-      if (_wifiIP != null) {
-        setState(() {
-          nameWifi = wifiName??"NO NAME";
-          wifiIP = _wifiIP;
-        });
-        print(nameWifi);
-      } else {
-        print('Not connected to a Wi-Fi network.');
-      } 
-    }
+  }
+
+  Future<void> searchWIFI() async {
+    var wifiName = await info.getWifiName();
+    wifiObject.clear();
+
+    if (wifiName != null) {
+      setState(() {
+        wifiObject.add([wifiName, false]);
+      });
+    } else {
+      setState(() {
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("There's no SPG Red", style: TextStyle(fontSize: 15),))
+      ); 
+      });
       
+    }
   }
 
   @override
@@ -50,30 +56,103 @@ class _WifiSettings extends State<WifiSettings> {
         title: const Text("Wiffi Setting", style: TextStyle(color: AppColors.mainColor),),
         iconTheme: const IconThemeData(color: AppColors.mainColor),
       ),
-      body: ListView(
+      body: Column(
         children: [
-          Center(
-            child: ElevatedButton(
-              // style: style,
-              onPressed: () => connectWifi(),
-              child: const Text("Connect"),
+          Container(
+            padding: const EdgeInsets.only(bottom: 6),
+            decoration:  const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(width: 1.0, color: Color(0xFFe1edf0)),
+                right: BorderSide(width: 1.0, color: Color(0xFFe1edf0)),
+                left: BorderSide(width: 1.0, color: Color(0xFFe1edf0)),
+                top: BorderSide(width: 1.0, color: Color(0xFFe1edf0)),
+              ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20), 
+                bottomRight: Radius.circular(20)
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Expanded(
+                  // margin: const EdgeInsets.only(right: 10),
+                  child: Text(
+                    "Connect WIFI",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22
+                      
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: ElevatedButton(
+                    onPressed: () => searchWIFI(),
+                    child: const Icon(Icons.refresh),
+                    
+                  ),
+                ),
+              ],
             ),
           ),
-          Center(
-            child: Text(
-              wifiIP!,
-              style: const TextStyle(color: Colors.white),
+          Expanded(
+            child: ListView.builder(
+              itemCount: wifiObject.length,
+              itemBuilder: (context, index) {
+                return WifiItem( nameWifi: wifiObject[0][0], statusWifi: true );
+              },
             ),
-          ),
-          Center(
-            child: Text(
-              nameWifi,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
+          )
+          
+          
         ],
       ),
     );
  
+  }
+}
+
+
+//Lista Wifi
+class WifiItem extends StatelessWidget {
+  final String nameWifi;
+  final bool statusWifi;
+  const WifiItem({super.key, required this.nameWifi, required this.statusWifi});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(width: 1.0, color: Color(0xFFe1edf0)),
+          ),
+          
+        ),
+        
+        child: Row(
+          children: [
+            Icon(
+              Icons.wifi,
+              color: statusWifi ? Colors.green : Colors.red,
+              size: 40,
+            ),
+            Text(
+              nameWifi,
+              style: TextStyle(
+                color: statusWifi ? Colors.white : Colors.red,
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.left,
+              
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
