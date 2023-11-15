@@ -10,6 +10,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -23,9 +24,9 @@ class MyApp extends StatelessWidget {
       // home: const MainPage(),
       initialRoute: RouteManager.home,
       routes: {
-        RouteManager.home : (context) => const MainPage(),
-        RouteManager.wifiSetting : (context) => const WifiSettings(), 
-        RouteManager.monitoring : (context) => const WifiSettings()
+        RouteManager.home         : (context) => const MainPage(),
+        RouteManager.wifiSetting  : (context) => const WifiSettings(), 
+        RouteManager.monitoring   : (context) => const WifiSettings(),
       },
     );
   }
