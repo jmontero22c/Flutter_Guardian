@@ -21,10 +21,17 @@ class _WifiSettings extends State<WifiSettings> {
     getPermission();
   }
 
+  void closePage(){
+    Navigator.pop(context);
+  }
+
   Future<void> getPermission() async{
     var locationStatus = await Permission.location.status;
     if (locationStatus.isDenied){
       await Permission.locationWhenInUse.request();
+      if(locationStatus.isDenied){
+        closePage();
+      }
     }
     if (await Permission.location.isRestricted) {
       openAppSettings();
