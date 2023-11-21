@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:network_info_plus/network_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
+
+import 'package:location/location.dart';
+
 
 class WifiSettings extends StatefulWidget {
   const WifiSettings({super.key});
@@ -12,7 +15,7 @@ class WifiSettings extends StatefulWidget {
 
 class _WifiSettings extends State<WifiSettings> {
   final info = NetworkInfo();
-  var locationStatus = Permission.location.status;
+  // var locationStatus = Permission.location.status;
   List wifiObject = [];
 
   @override
@@ -26,16 +29,29 @@ class _WifiSettings extends State<WifiSettings> {
   }
 
   Future<void> getPermission() async{
-    var locationStatus = await Permission.location.status;
-    if (locationStatus.isDenied){
-      await Permission.locationWhenInUse.request();
-      if(locationStatus.isDenied){
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if(!_serviceEnabled){
+      _serviceEnabled = await location.requestService();
+      if(!_serviceEnabled){
         closePage();
       }
     }
-    if (await Permission.location.isRestricted) {
-      openAppSettings();
-    }
+    // var locationStatus = await Permission.location.status;
+    // if (locationStatus.isDenied){
+    //   await Permission.locationWhenInUse.request();
+    //   if(locationStatus.isDenied){
+    //     closePage();
+    //   }
+    // }
+    // if (await Permission.location.isRestricted) {
+    //   openAppSettings();
+    // }
   }
 
   Future<void> searchWIFI() async {
