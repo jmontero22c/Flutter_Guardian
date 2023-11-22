@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:my_app/Routes/routes.dart';
+import 'package:my_app/components/app_bar.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.secondColor,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Text("Menu"),
-        iconTheme: const IconThemeData(color: AppColors.mainColor),
-      ),
+
+    return const Scaffold(
+      appBar: AppBarCustom(tittle: 'Smart Guardian P3S'),
       backgroundColor: AppColors.mainColor,
 
-      body: const Options(),
+      body: Options(),
     );
   }
 }
@@ -33,6 +29,8 @@ class Options extends StatelessWidget {
       crossAxisCount: 2,
       children: List.generate(3, (index) {
         return InkWell(
+          borderRadius: BorderRadius.circular(20),
+          
           child: Container(
             margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(

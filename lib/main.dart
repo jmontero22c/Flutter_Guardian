@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => WifiViewModel(),
+      create: (_) => WifiViewModel(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
