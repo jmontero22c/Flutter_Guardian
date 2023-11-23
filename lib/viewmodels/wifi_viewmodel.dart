@@ -1,37 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:my_app/models/wifi_model.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 
 class WifiViewModel extends ChangeNotifier{
+  // Wifi wifiObject = Wifi(nameSSID: '',ip: '',status: false);
 
-  //Connect Wifi SPG
-  Future<bool> connectWifi(BuildContext context) async{
+  // wifiObject.nameSSID = "";
+  String _wifiName = '';
+  bool _wifiStatus = false;
+  String _wifiIP = '';
+
+  //Getters
+  String get wifiName => _wifiName;
+  String get wifiIP => _wifiIP;
+  bool get wifiStatus => _wifiStatus;
+
+  //Setters
+  void setWifiName(String val){
+    _wifiName = val;
+    notifyListeners();
+  }
+  void setWifiIP(String val){
+    _wifiIP = val;
+  }
+  void setWifiStatus(bool val){
+    _wifiStatus = val;
+    notifyListeners();
+  }
+  
+
+  //*Connect Wifi SPG
+  Future connectWifi(BuildContext context) async{
     final info = NetworkInfo();
-    Wifi wifi = Wifi();
     
     var wifiName = await info.getWifiName();
     
     if (wifiName != null) {    
-      wifi.setNameSSID(wifiName);
+      setWifiName(wifiName);
     }else {
-      wifi.setNameSSID('');
+      setWifiName('');
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("There's no SPG Red", style: TextStyle(fontSize: 15),))
       );      
     }
-    
-    bool result = false;
-    return result;
   }
 
   //Check if the app have permissions
   Future<bool> isGPSGranted() async{
     Location location = Location();
     final permision = await location.hasPermission();
-
     if(permision == PermissionStatus.granted){
       return true;
     }
@@ -45,13 +64,13 @@ class WifiViewModel extends ChangeNotifier{
     Location location = Location();
 
     bool result = false;
-    bool _serviceEnabled;
+    bool serviceEnabled;
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();   
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();   
     }
-    result = _serviceEnabled;
+    result = serviceEnabled;
     return result;
   }
 
