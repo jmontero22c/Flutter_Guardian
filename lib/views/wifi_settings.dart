@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:my_app/components/app_bar.dart';
 import 'package:my_app/services/wifi_services.dart';
 import 'package:my_app/viewmodels/wifi_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class WifiSettings extends StatefulWidget {
   const WifiSettings({super.key});
@@ -132,6 +135,7 @@ class WifiItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var miModelo = Provider.of<WifiViewModel>(context);
     return Ink(
       height: 60,
       decoration: const BoxDecoration(
@@ -141,7 +145,21 @@ class WifiItem extends StatelessWidget {
       child: InkWell(
         onTap: () {
           WifiServices peticion = WifiServices();
-          peticion.sendRequest();
+          peticion.sendRequest('http://192.168.4.1/GetSSID?request=ssid').then((value) {
+            try {
+              RegExp regex = RegExp(r'^\[.*\]$');
+              if (regex.hasMatch(value)){
+                // wifiActions.setWifiStatus(true);
+                
+                log(miModelo.wifiStatus.toString());
+                Provider.of<WifiViewModel>(context, listen: false).setWifiStatus(true);
+                log(miModelo.wifiStatus.toString());
+              }
+            } catch (e) {
+              log(e.toString());
+            }
+            
+          });
         },
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         splashColor: Colors.grey,
