@@ -71,9 +71,18 @@ class _WifiSettings extends State<WifiSettings> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    setState(() {
-                      isItemPressed = !isItemPressed;
-                    });  
+                    WifiServices peticion = WifiServices();
+                    peticion.sendRequest('http://192.168.4.1/GetSSID?request=ssid').then((value) {
+                      try {
+                        RegExp regex = RegExp(r'^\[.*\]$');
+                        if (regex.hasMatch(value)){
+                          Provider.of<WifiViewModel>(context).setWifiStatus(true);                  
+                        }
+                      } catch (e) {
+                        log(e.toString());
+                      }
+                      
+                    });
                   },
                   child: Container(
                     margin: const EdgeInsets.all(8),
@@ -144,22 +153,7 @@ class WifiItem extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          WifiServices peticion = WifiServices();
-          peticion.sendRequest('http://192.168.4.1/GetSSID?request=ssid').then((value) {
-            try {
-              RegExp regex = RegExp(r'^\[.*\]$');
-              if (regex.hasMatch(value)){
-                // wifiActions.setWifiStatus(true);
-                
-                log(miModelo.wifiStatus.toString());
-                Provider.of<WifiViewModel>(context, listen: false).setWifiStatus(true);
-                log(miModelo.wifiStatus.toString());
-              }
-            } catch (e) {
-              log(e.toString());
-            }
-            
-          });
+          
         },
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         splashColor: Colors.grey,
