@@ -61,46 +61,27 @@ class _WifiSettings extends State<WifiSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarCustom(tittle: 'Wi-Fi Settings'),
-      body: Column(
+      body:Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           /**************Lista de Wifi**************/
-          Expanded(
-            child: ListView.builder(
-              itemCount: wifiObject.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    WifiServices peticion = WifiServices();
-                    peticion.sendRequest('http://192.168.4.1/GetSSID?request=ssid').then((value) {
-                      try {
-                        RegExp regex = RegExp(r'^\[.*\]$');
-                        if (regex.hasMatch(value)){
-                          Provider.of<WifiViewModel>(context).setWifiStatus(true);                  
-                        }
-                      } catch (e) {
-                        log(e.toString());
-                      }
-                      
-                    });
-                  },
-                  child: Container(
+          Consumer<WifiViewModel>(
+            builder: (context, wifiViewModel, _) {
+              return Expanded(
+                child: ListView.builder(
+                itemCount: wifiObject.length,
+                itemBuilder: (context, index) {
+                  return Container(
                     margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: isItemPressed ? Colors.grey : Colors.transparent, // Cambia el color de la sombra al hacer clic
-                        ),
-                      ],
-                    ),
                     child: WifiItem(
                       nameWifi: wifiActions.wifiName,
-                      statusWifi: wifiActions.wifiStatus,
+                      statusWifi: wifiViewModel.wifiStatus,
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+            );
+            },
           ),
           /**************Boton de Buscar**************/
           Padding(
@@ -130,7 +111,7 @@ class _WifiSettings extends State<WifiSettings> {
             ),
           ),
         ]
-      ),
+      )
     );
   }
 }
@@ -142,53 +123,79 @@ class WifiItem extends StatelessWidget {
   final bool statusWifi;
   const WifiItem({super.key, required this.nameWifi, required this.statusWifi});
 
+  void connectWifi(WifiViewModel wifiViewModel){
+    WifiServices peticion = WifiServices();
+    peticion.sendRequest('http://192.168.4.1/GetSSID?request=ssid').then((value) {
+      try{
+        RegExp regex = RegExp(r'^\[.*\]$');
+        //Si ya está conectado, desconecta
+        if (wifiViewModel.wifiStatus){
+          wifiViewModel.setWifiStatus(false);
+          return; 
+        }
+        //Si el wifi responde, conecta, de lo contrario desconecta.
+        if (regex.hasMatch(value)){
+          log("Conectado");
+          wifiViewModel.setWifiStatus(true);           
+        }else{
+          wifiViewModel.setWifiStatus(false);
+        }
+      }catch (e) {
+        log(e.toString());
+      }    
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var miModelo = Provider.of<WifiViewModel>(context);
     return Ink(
       height: 60,
       decoration: const BoxDecoration(
         color: AppColors.secondColor,
         borderRadius: BorderRadius.all(Radius.circular(20))
       ),
-      child: InkWell(
-        onTap: () {
-          
+      child: Consumer<WifiViewModel>(
+        builder: (context,wifiViewModel,_){
+          return InkWell(
+          onTap: (){
+            connectWifi(wifiViewModel);
+          },
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          splashColor: Colors.grey,
+          child:Align(
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                const SizedBox(width: 15),
+                /***********ICONO WIFI***********/
+                Icon(
+                  Icons.wifi,
+                  color: statusWifi ? Colors.green : Colors.red,
+                  size: 40,
+                ),
+                const SizedBox(width: 5),
+                /***********TEXTO WIFI***********/
+                Text(
+                  nameWifi,
+                  style: const TextStyle(
+                    color: AppColors.fontSecond,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                /***********FLECHA WIFI***********/
+                const Expanded( 
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.arrow_forward_ios),
+                  ),
+                ),
+                const SizedBox(width: 10),
+              ],
+            ),
+          ),
+        );
         },
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        splashColor: Colors.grey,
-        child:Align(
-          alignment: Alignment.center,
-          child: Row(
-            children: [
-              const SizedBox(width: 15),
-              /***********ICONO WIFI***********/
-              Icon(
-                Icons.wifi,
-                color: statusWifi ? Colors.green : Colors.red,
-                size: 40,
-              ),
-              const SizedBox(width: 5),
-              /***********TEXTO WIFI***********/
-              Text(
-                nameWifi,
-                style: const TextStyle(
-                  color: AppColors.fontSecond,
-                  fontSize: 20,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              /***********FLECHA WIFI***********/
-              const Expanded( 
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Icon(Icons.arrow_forward_ios),
-                ),
-              ),
-              const SizedBox(width: 10),
-            ],
-    ),
-        ),
       ),
     );
   }
