@@ -25,37 +25,65 @@ class Options extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    return GridView.count(
-      crossAxisCount: 2,
-      children: List.generate(3, (index) {
-        return InkWell(
-          borderRadius: BorderRadius.circular(20),
-          
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
           child: Container(
-            margin: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: AppColors.secondColor, 
+              color: AppColors.secondColor,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF3A5160).withOpacity(0.2),
+                  offset: const Offset(1.1, 1.1),
+                  blurRadius: 10.0
+                )
+              ]
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(_icons[index], size: 60),
-                Text(
-                  _textIcons[index], 
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-              ],
+            height: 20,
+            child: const Text(
+              'Hola'
             ),
           ),
-          onTap: () {
-            Navigator.pushNamed(context, RouteManager.wifiSetting);   
-          },  
-        );
-      }),
+        ),
+        
+        //Grid con los botones de las diferentes pantallas
+        Expanded(
+          child: GridView.count(
+            crossAxisCount: 2,
+            children: List.generate(3, (index) {
+              return InkWell(
+                borderRadius: BorderRadius.circular(20),
+                
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.secondColor, 
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(_icons[index], size: 60),
+                      Text(
+                        _textIcons[index], 
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, RouteManager.wifiSetting);   
+                },  
+              );
+            }),
+          ),
+        ),
+      ]
     );
   }
 }
