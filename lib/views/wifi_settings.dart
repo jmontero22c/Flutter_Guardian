@@ -131,14 +131,17 @@ class WifiItem extends StatelessWidget {
         //Si ya está conectado, desconecta
         if (wifiViewModel.wifiStatus){
           wifiViewModel.setWifiStatus(false);
+          wifiViewModel.setWifiName('NONE');
           return; 
         }
         //Si el wifi responde, conecta, de lo contrario desconecta.
         if (regex.hasMatch(value)){
           log("Conectado");
-          wifiViewModel.setWifiStatus(true);           
+          wifiViewModel.setWifiStatus(true); 
+          wifiViewModel.setWifiName(nameWifi);          
         }else{
           wifiViewModel.setWifiStatus(false);
+          wifiViewModel.setWifiName('NONE');
         }
       }catch (e) {
         log(e.toString());
