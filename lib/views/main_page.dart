@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:my_app/Routes/routes.dart';
 import 'package:my_app/components/app_bar.dart';
+import 'package:my_app/viewmodels/wifi_viewmodel.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -25,12 +26,14 @@ class Options extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    WifiViewModel wifiViewModel = WifiViewModel();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(20),
           child: Container(
+            padding: const EdgeInsets.only(left: 15, right: 15),
             decoration: BoxDecoration(
               color: AppColors.secondColor,
               boxShadow: [
@@ -41,10 +44,48 @@ class Options extends StatelessWidget {
                 )
               ]
             ),
-            height: 20,
-            child: const Text(
-              'Hola'
-            ),
+            // height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(  
+                    children: [
+                      //TEXTO STATUS MAIN
+                      Row(
+                        children: [
+                          const Icon(Icons.star_rate),
+                          Text(
+                            wifiViewModel.wifiName
+                          ),
+                        ],
+                      ),
+                
+                      //TEXTO NOMBRE MAIN
+                      Row(
+                        children: [
+                          const Icon(Icons.star_rate),
+                          Text(wifiViewModel.wifiStatus ? 'ON' : 'OFF'),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Align(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30, bottom: 30, right: 15, left: 15 ),
+                    child: SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: Image.asset(
+                        'assets/Chayanne.jpg',
+                        alignment: Alignment.centerRight,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
           ),
         ),
         
