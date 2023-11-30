@@ -10,10 +10,12 @@ class WifiViewModel extends ChangeNotifier{
   String _wifiName = '';
   bool _wifiStatus = false;
   String _wifiIP = '';
+  String _versionCPU = '';
 
   //Getters
   String get wifiName => _wifiName;
   String get wifiIP => _wifiIP;
+  String get versionCPU => _versionCPU;
   bool get wifiStatus => _wifiStatus;
 
   //Setters
@@ -26,6 +28,10 @@ class WifiViewModel extends ChangeNotifier{
   }
   void setWifiStatus(bool val){
     _wifiStatus = val;
+    notifyListeners();
+  }
+  void setVersionCPU(String val){
+    _versionCPU = val;
     notifyListeners();
   }
   
