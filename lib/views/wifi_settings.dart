@@ -127,7 +127,8 @@ class WifiItem extends StatelessWidget {
 
   void getInfoData(WifiViewModel wifiViewModel) async{
     List<String> responseData;
-    await peticion.sendRequest('[INFODATA]').then((value){
+    await peticion.sendRequest('[INFOVERSION]').then((value){
+      
       responseData = value.split(';');
       wifiViewModel.setVersionCPU(int.parse(responseData[1]));
       wifiViewModel.setModules(responseData[2]);
@@ -136,7 +137,7 @@ class WifiItem extends StatelessWidget {
 
   void connectWifi(WifiViewModel wifiViewModel){
     
-    peticion.sendRequest('http://192.168.4.1/GetSSID?request=ssid').then((value) {
+    peticion.sendRequestConnect('http://192.168.4.1/GetSSID?request=ssid').then((value) {
       try{
         RegExp regex = RegExp(r'^\[.*\]$');
         //Si ya está conectado, desconecta
@@ -147,9 +148,10 @@ class WifiItem extends StatelessWidget {
         }
         //Si el wifi responde, conecta, de lo contrario desconecta.
         if (regex.hasMatch(value)){
+          getInfoData(wifiViewModel);
           wifiViewModel.setWifiStatus(true); 
           wifiViewModel.setWifiName(nameWifi);    
-          getInfoData(wifiViewModel); 
+           
         }else{
           wifiViewModel.setWifiStatus(false);
           wifiViewModel.setWifiName('NONE');

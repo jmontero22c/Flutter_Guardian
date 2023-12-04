@@ -10,8 +10,34 @@ import 'package:provider/provider.dart';
 class WifiServices {
 
   WifiViewModel wifiActions = WifiViewModel();
-  
+
   Future<String> sendRequest(request) async {
+    String result = '';
+    var url = Uri.parse("http://192.168.4.1/GuardianAPI?request=$request&timeout=2000");
+    var headers = {
+      'Content-Type': 'application/json'    
+    };
+    
+    try {
+      var response = await http.get(url, headers: headers).timeout(const Duration(seconds: 10));
+    
+      if(response.statusCode == 200) {    
+        result = jsonDecode(response.body)['dataCPU'].toString();
+      } else {
+        log("Error");
+      }
+
+    } catch (err) {
+      if (err is TimeoutException) {
+        log("Se agotó el tiempo de espera");
+        
+      }
+    }
+
+    return result;
+  }
+  
+  Future<String> sendRequestConnect(request) async {
     String result = '';
     var url = Uri.parse(request);
     var headers = {
@@ -21,8 +47,7 @@ class WifiServices {
     try {
       var response = await http.get(url, headers: headers).timeout(const Duration(seconds: 10));
     
-      if(response.statusCode == 200) {
-        log("Conexion Exitosa ${jsonDecode(response.body)}");           
+      if(response.statusCode == 200) {    
         result = jsonDecode(response.body)['getSSID'].toString();
       } else {
         log("Error");

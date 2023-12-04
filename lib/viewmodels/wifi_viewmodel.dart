@@ -38,6 +38,7 @@ class WifiViewModel extends ChangeNotifier{
 
   void setModules(String val){
     _modules = val;
+    notifyListeners();
   }
   
 
