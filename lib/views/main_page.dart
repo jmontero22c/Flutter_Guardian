@@ -22,8 +22,26 @@ class MainPage extends StatelessWidget {
 class Options extends StatelessWidget {
   const Options({super.key});
 
-  static final List<IconData> _icons= [Icons.wifi, Icons.monitor_rounded, Icons.usb];
-  static final List<String> _textIcons = ['Wifi Settings', 'Monitoring', 'USB Download'];
+  // static final List<IconData> _icons= [Icons.wifi, Icons.monitor_rounded, Icons.usb];
+  // static final List<String> _textIcons = ['Wifi Settings', 'Monitoring', 'USB Download'];
+
+  static final Map<int,Map<String,dynamic>> buttonsPage = {
+    0 : {
+      'text':'Wifi Settings',
+      'icon':Icons.wifi,
+      'route':RouteManager.wifiSetting
+    },
+    1 : {
+      'text':'Monitoring',
+      'icon':Icons.monitor_rounded,
+      'route':RouteManager.monitoring
+    },
+    2 : {
+      'text':'USB Download',
+      'icon':Icons.monitor_rounded,
+      'route':RouteManager.wifiSetting
+    }
+  };
 
   @override
   Widget build(BuildContext context){
@@ -50,7 +68,7 @@ class Options extends StatelessWidget {
                     bottomRight: Radius.circular(8.0),
                     topRight: Radius.circular(8.0)),
             ),
-            height: 100,
+            height: 200,
 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -153,7 +171,7 @@ class Options extends StatelessWidget {
                                 SizedBox(width: 25, height: 25, child: Image.asset('assets/cpu.jpg'),),
                                 const SizedBox(width: 10),
                                 Text(
-                                  wifiViewModel.wifiStatus ? wifiViewModel.versionCPU : '----',
+                                  wifiViewModel.wifiStatus ? wifiViewModel.versionCPU.toString() : '----',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15
@@ -189,12 +207,14 @@ class Options extends StatelessWidget {
         Expanded(
           child: GridView.count(
             crossAxisCount: 2,
-            children: List.generate(3, (index) {
-              return InkWell(
-                borderRadius: BorderRadius.circular(20),
+            childAspectRatio: 1.4,
+            mainAxisSpacing: 20,
+            children: List.generate(buttonsPage.length, (index) {
+              return GestureDetector(
+                // borderRadius: BorderRadius.circular(20),
                 
                 child: Container(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.only(left: 20, right: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: AppColors.secondColor, 
@@ -202,19 +222,26 @@ class Options extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Icon(_icons[index], size: 60),
+                      Icon(buttonsPage[index]!['icon'], size: 50),
+                      Container(
+                        margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                        ),
+                        height: 1,
+                      ),
                       Text(
-                        _textIcons[index], 
+                        buttonsPage[index]!['text'], 
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold
+                          // fontWeight: FontWeight.bold
                         ),
                       ),
                     ],
                   ),
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, RouteManager.wifiSetting);   
+                  Navigator.pushNamed(context, buttonsPage[index]!['route']);   
                 },  
               );
             }),

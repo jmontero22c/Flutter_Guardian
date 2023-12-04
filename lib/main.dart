@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:my_app/Routes/routes.dart';
 import 'package:my_app/viewmodels/wifi_viewmodel.dart';
+import 'package:my_app/views/monitoring_menu.dart';
 import 'package:my_app/views/wifi_settings.dart';
 import 'package:provider/provider.dart';
 import 'views/main_page.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         routes: {
           RouteManager.home         : (context) => const MainPage(),
           RouteManager.wifiSetting  : (context) => const WifiSettings(), 
-          RouteManager.monitoring   : (context) => const WifiSettings(),
+          RouteManager.monitoring   : (context) => MonitoringMenu(wifiViewModel: Provider.of<WifiViewModel>(context)),
         },
       ),
     );

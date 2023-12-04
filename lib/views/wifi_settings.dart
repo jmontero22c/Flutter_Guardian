@@ -121,10 +121,21 @@ class _WifiSettings extends State<WifiSettings> {
 class WifiItem extends StatelessWidget {
   final String nameWifi;
   final bool statusWifi;
-  const WifiItem({super.key, required this.nameWifi, required this.statusWifi});
+  WifiItem({super.key, required this.nameWifi, required this.statusWifi});
+
+  final WifiServices peticion = WifiServices();
+
+  void getInfoData(WifiViewModel wifiViewModel) async{
+    List<String> responseData;
+    await peticion.sendRequest('[INFODATA]').then((value){
+      responseData = value.split(';');
+      wifiViewModel.setVersionCPU(int.parse(responseData[1]));
+      wifiViewModel.setModules(responseData[2]);
+    });
+  }
 
   void connectWifi(WifiViewModel wifiViewModel){
-    WifiServices peticion = WifiServices();
+    
     peticion.sendRequest('http://192.168.4.1/GetSSID?request=ssid').then((value) {
       try{
         RegExp regex = RegExp(r'^\[.*\]$');
@@ -136,9 +147,9 @@ class WifiItem extends StatelessWidget {
         }
         //Si el wifi responde, conecta, de lo contrario desconecta.
         if (regex.hasMatch(value)){
-          log("Conectado");
           wifiViewModel.setWifiStatus(true); 
-          wifiViewModel.setWifiName(nameWifi);          
+          wifiViewModel.setWifiName(nameWifi);    
+          getInfoData(wifiViewModel); 
         }else{
           wifiViewModel.setWifiStatus(false);
           wifiViewModel.setWifiName('NONE');

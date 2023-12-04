@@ -7,16 +7,18 @@ class WifiViewModel extends ChangeNotifier{
   // Wifi wifiObject = Wifi(nameSSID: '',ip: '',status: false);
 
   // wifiObject.nameSSID = "";
-  String _wifiName = '';
-  bool _wifiStatus = false;
-  String _wifiIP = '';
-  String _versionCPU = '';
+  String _wifiName    = '';
+  String _wifiIP      = '';
+  String _modules     = '';
+  int    _versionCPU  = 0;
+  bool   _wifiStatus  = false;
 
   //Getters
-  String get wifiName => _wifiName;
-  String get wifiIP => _wifiIP;
-  String get versionCPU => _versionCPU;
-  bool get wifiStatus => _wifiStatus;
+  String get wifiName   => _wifiName;
+  String get wifiIP     => _wifiIP;
+  String get modules    => _modules;
+  int    get versionCPU => _versionCPU;
+  bool   get wifiStatus => _wifiStatus;
 
   //Setters
   void setWifiName(String val){
@@ -30,9 +32,12 @@ class WifiViewModel extends ChangeNotifier{
     _wifiStatus = val;
     notifyListeners();
   }
-  void setVersionCPU(String val){
+  void setVersionCPU(int val){
     _versionCPU = val;
-    notifyListeners();
+  }
+
+  void setModules(String val){
+    _modules = val;
   }
   
 
