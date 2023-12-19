@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:my_app/Routes/routes.dart';
 import 'package:my_app/components/app_bar.dart';
+import 'package:my_app/components/box_menu.dart';
 import 'package:my_app/viewmodels/wifi_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,7 @@ class Options extends StatelessWidget {
     1 : {
       'text':'Monitoring',
       'icon':Icons.monitor_rounded,
-      'route':RouteManager.monitoring
+      'route':RouteManager.monitoringMenu
     },
     2 : {
       'text':'USB Download',
@@ -68,7 +69,7 @@ class Options extends StatelessWidget {
                     bottomRight: Radius.circular(8.0),
                     topRight: Radius.circular(8.0)),
             ),
-            height: 200,
+            height: 185,
 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,36 +211,12 @@ class Options extends StatelessWidget {
             childAspectRatio: 1.4,
             mainAxisSpacing: 20,
             children: List.generate(buttonsPage.length, (index) {
-              return GestureDetector(
-                // borderRadius: BorderRadius.circular(20),
-                
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppColors.secondColor, 
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(buttonsPage[index]!['icon'], size: 50),
-                      Container(
-                        margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                        ),
-                        height: 1,
-                      ),
-                      Text(
-                        buttonsPage[index]!['text'], 
-                        style: const TextStyle(
-                          fontSize: 16,
-                          // fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              return GestureDetector(  
+                child: BoxMenu(
+                  icon: buttonsPage[index]!['icon'],
+                  tittleBox:  buttonsPage[index]!['text'],
+                  margins: const EdgeInsets.only(left: 20, right: 20)
+                ), 
                 onTap: () {
                   Navigator.pushNamed(context, buttonsPage[index]!['route']);   
                 },  

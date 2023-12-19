@@ -10,14 +10,16 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: AppColors.secondColor,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))
-      ),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
       centerTitle: true,
-      title: Text(tittle),
+      title: Text(
+        tittle,
+        style: const TextStyle(fontSize: 19),
+      ),
       iconTheme: const IconThemeData(color: AppColors.mainColor),
     );
   }
-  
+
   @override
-  Size get preferredSize => const Size.fromHeight(55);
+  Size get preferredSize => const Size.fromHeight(45);
 }

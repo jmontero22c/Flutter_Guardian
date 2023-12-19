@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:my_app/Colors/colors.dart';
+import 'package:my_app/Routes/routes.dart';
 import 'package:my_app/components/app_bar.dart';
+import 'package:my_app/components/box_menu.dart';
 import 'package:my_app/viewmodels/wifi_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,7 @@ class _MonitoringMenuState extends State<MonitoringMenu> {
     'C': {'icon': Icons.accessibility, 'name': 'M2 Output'},
     'X': {'icon': Icons.add_box, 'name': 'M3 SUT'},
   };
-  
-  // _MonitoringMenuState(WifiViewModel wifiViewModel);
+
 
   @override
   void initState(){     
@@ -57,35 +57,12 @@ class _MonitoringMenuState extends State<MonitoringMenu> {
           children: List.generate(names.length, (index) {
             return GestureDetector(
               // borderRadius: BorderRadius.circular(20),
-              
-              child: Container(
-                margin: const EdgeInsets.only(left:60, right: 60),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: AppColors.secondColor, 
-                ),
-                
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(icons.elementAt(index), size: 50),
-                    Container(
-                      margin: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                      decoration: const BoxDecoration(
-                        color: Colors.black,
-                      ),
-                      height: 1,
-                    ),
-                    Text(
-                      names.elementAt(index), 
-                      style: const TextStyle(
-                        fontSize: 16,
-                        // fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              onTap: () => Navigator.pushNamed(context, RouteManager.monitoring, arguments: {names.elementAt(index)}),
+              child: BoxMenu(
+                icon: icons.elementAt(index),
+                tittleBox:  names.elementAt(index),
+                margins: const EdgeInsets.only(left:60, right: 60),
+              )
               
             );
           }),

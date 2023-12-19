@@ -30,7 +30,6 @@ class WifiServices {
     } catch (err) {
       if (err is TimeoutException) {
         log("Se agotó el tiempo de espera");
-        
       }
     }
 

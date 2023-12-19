@@ -9,7 +9,7 @@ class WifiViewModel extends ChangeNotifier{
   // wifiObject.nameSSID = "";
   String _wifiName    = '';
   String _wifiIP      = '';
-  String _modules     = '';
+  String _modules     = 'ACX';
   int    _versionCPU  = 0;
   bool   _wifiStatus  = false;
 
