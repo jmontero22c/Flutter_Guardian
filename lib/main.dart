@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:my_app/Routes/routes.dart';
+import 'package:my_app/viewmodels/monitoring_viewmodel.dart';
 import 'package:my_app/viewmodels/wifi_viewmodel.dart';
 import 'package:my_app/views/monitoring.dart';
 import 'package:my_app/views/monitoring_menu.dart';
@@ -12,15 +13,21 @@ void main() {
   runApp(const MyApp());
   
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => WifiViewModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => WifiViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MonitoringViewModel() 
+        )
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

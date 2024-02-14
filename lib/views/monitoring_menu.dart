@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Routes/routes.dart';
 import 'package:my_app/components/app_bar.dart';
 import 'package:my_app/components/box_menu.dart';
+import 'package:my_app/viewmodels/monitoring_viewmodel.dart';
 import 'package:my_app/viewmodels/wifi_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -57,7 +58,10 @@ class _MonitoringMenuState extends State<MonitoringMenu> {
           children: List.generate(names.length, (index) {
             return GestureDetector(
               // borderRadius: BorderRadius.circular(20),
-              onTap: () => Navigator.pushNamed(context, RouteManager.monitoring, arguments: {names.elementAt(index)}),
+              onTap: (){
+                Provider.of<MonitoringViewModel>(context, listen:false).setIsTimerActive(false);
+                Navigator.pushNamed(context, RouteManager.monitoring, arguments: {names.elementAt(index)});
+              },
               child: BoxMenu(
                 icon: icons.elementAt(index),
                 tittleBox:  names.elementAt(index),

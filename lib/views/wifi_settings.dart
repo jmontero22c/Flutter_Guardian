@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:my_app/Colors/colors.dart';
 import 'package:my_app/components/app_bar.dart';
+import 'package:my_app/models/guardian_att.dart';
 import 'package:my_app/services/wifi_services.dart';
 import 'package:my_app/viewmodels/wifi_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -122,6 +123,7 @@ class WifiItem extends StatelessWidget {
   final String nameWifi;
   final bool statusWifi;
   WifiItem({super.key, required this.nameWifi, required this.statusWifi});
+  final GuardianAtt guardian = GuardianAtt();
 
   final WifiServices peticion = WifiServices();
 
@@ -131,6 +133,7 @@ class WifiItem extends StatelessWidget {
       
       responseData = value.split(';');
       wifiViewModel.setVersionCPU(int.parse(responseData[1]));
+      guardian.setVersionGuardian(responseData[1]);
       wifiViewModel.setModules(responseData[2]);
     });
   }

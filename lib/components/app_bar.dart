@@ -3,7 +3,8 @@ import 'package:my_app/Colors/colors.dart';
 
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final String tittle;
-  const AppBarCustom({super.key, required this.tittle});
+  final IconButton? iconLeading;
+  const AppBarCustom({super.key, required this.tittle, this.iconLeading});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
         style: const TextStyle(fontSize: 19),
       ),
       iconTheme: const IconThemeData(color: AppColors.mainColor),
+      leading: iconLeading,
     );
   }
 
